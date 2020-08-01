@@ -1,0 +1,15 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: spring-random-pod-deployment
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: spring-random-pod-deployment
+  targetCPUUtilizationPercentage: 70
+  minReplicas: 3
+  maxReplicas: 10
+
+
+

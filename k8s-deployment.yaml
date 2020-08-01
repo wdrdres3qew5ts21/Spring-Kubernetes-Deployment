@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-random-pod-deployment
+  annotations:
+    kubernetes.io/change-cause: "ENV_CHANGE_CAUSE_MESSAGE"
+  labels:
+    app: spring-random-pod
+    version: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spring-random-pod
+      version: dev
+  template:
+    metadata:
+      labels:
+        app: spring-random-pod
+        version: dev
+    spec:
+      imagePullSecrets:
+       - name: my-azure-registry
+      containers:
+      - name: spring-random-pod
+        image: AZ_CONTAINER_REGISTRY_URL/dev/spring-random-pod:IMAGE_BUILD_ID
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+        env:
+        - name: SERVER_ENVIRONMENT
+          value: "ENV_SERVER_ENVIRONMENT"
+        - name: BRANCH
+          value: "ENV_GIT_BRANCH"
+        - name: VERSION
+          value: "ENV_BUILD_ID"
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        ports:
+          - containerPort: 8080

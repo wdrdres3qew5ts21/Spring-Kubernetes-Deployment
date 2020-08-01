@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-random-pod-deployment-production
+  annotations:
+    kubernetes.io/change-cause: "{{.Values.global.CHANGE_CAUSE_MESSAGE }}"
+  labels:
+    app: spring-random-pod
+    version: "{{.Values.Global.}}"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spring-random-pod
+      version: production
+  template:
+    metadata:
+      labels:
+        app: spring-random-pod
+        version: production
+    spec:
+      imagePullSecrets:
+       - name: my-azure-registry
+      containers:
+      - name: spring-random-pod
+        image: cyberpunkPotato2077.azurecr.io/dev/spring-random-pod:v{{.Chart.AppVersion}}
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+        env:
+        - name: SERVER_ENVIRONMENT
+          value: "HELM Package"
+        - name: BRANCH
+          value: "HELM Package"
+        - name: VERSION
+          value: "v1.0.0"
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        ports:
+          - containerPort: 8080
