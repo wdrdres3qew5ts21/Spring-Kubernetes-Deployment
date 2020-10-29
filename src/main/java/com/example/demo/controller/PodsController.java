@@ -28,6 +28,13 @@ public class PodsController {
     public HashMap<String, String> getPodName() {
         return generateName.getPodDetail();
     }
+
+    @GetMapping("/openshift")
+    public HashMap<String, String> openshift() {
+        HashMap<String, String> message = new HashMap();
+        message.put("Che", "Openshift")
+        return message;
+    }
     
     @GetMapping("/test")
     public String test() {
