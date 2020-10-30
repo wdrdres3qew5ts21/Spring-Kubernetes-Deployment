@@ -32,7 +32,7 @@ public class PodsController {
     @GetMapping("/openshift")
     public HashMap<String, String> openshift() {
         HashMap<String, String> message = new HashMap();
-        message.put("Che", "Openshift")
+        message.put("Che", "Openshift");
         return message;
     }
     
